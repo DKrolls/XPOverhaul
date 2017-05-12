@@ -8,11 +8,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 
 import io.github.dkrolls.XPOverhaul.BottleEnchantment;
+import io.github.dkrolls.XPOverhaul.ConfigHandler;
 
 public class EnchantingTableListener implements Listener{
 	
 	@EventHandler
 	public void EnchantInteract(PrepareItemEnchantEvent e){
+		if(!ConfigHandler.ALLOW_BOTTLE_ENCHANTING){
+			e.setCancelled(true);
+			return;
+		}
 		e.setCancelled(false);
 		Player player = e.getEnchanter();
 		if(player.hasPermission("XPO.bottle") && e.getItem().getType() == Material.GLASS_BOTTLE){

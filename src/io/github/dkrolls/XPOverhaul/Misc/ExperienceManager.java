@@ -267,11 +267,20 @@ public class ExperienceManager {
 	 * @return The amount of XP needed for the level.
 	 * @throws IllegalArgumentException if the level is less than 0 or greater than the current hard maximum
 	 */
-	public int getXpForLevel(int level) {
+	public static int getXpForLevel(int level) {
 		Validate.isTrue(level >= 0 && level <= hardMaxLevel, "Invalid level " + level + "(must be in range 0.." + hardMaxLevel + ")");
 		if (level >= xpTotalToReachLevel.length) {
 			initLookupTables(level * 2);
 		}
 		return xpTotalToReachLevel[level];
 	}
+	/**
+	 * A static method that will convert a level to its number of XP points.
+	 * 
+	 * @param level The level to check for
+	 * @return The total XP needed to reach that level
+	 *
+	public static int getXPfromLevel(int level){
+		return 
+	}*/
 }

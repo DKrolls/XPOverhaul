@@ -14,6 +14,8 @@ public class ConfigHandler {
 	static HashMap<String, File> balances = new HashMap<String, File>();
 	
 	public static long DEFAULT_STARTING_BALANCE;
+	public static boolean ALLOW_BOTTLE_ENCHANTING;
+	public static boolean ALLOW_VIEWING_OTHER_BALANCES;
 	
 	public static void initializeConfigs(){
 		File file = new File(Main.instance.getDataFolder(), "config.yml");
@@ -22,6 +24,8 @@ public class ConfigHandler {
 		}
 		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 		DEFAULT_STARTING_BALANCE = config.getLong("balances.initial-balance"); //could break
+		ALLOW_VIEWING_OTHER_BALANCES = config.getBoolean("balances.allow-viewing-other-balances");
+		ALLOW_BOTTLE_ENCHANTING = config.getBoolean("enchanting.allow-bottle-enchanting");
 		File balanceFolder = new File(Main.instance.getDataFolder(), "balances");
 		if(!balanceFolder.exists()){
 			balanceFolder.mkdirs();
@@ -29,14 +33,15 @@ public class ConfigHandler {
 		balances = getBalances(); // ~N initialization, constant lookup and insert
 	}
 	
-	public static void createPlayerInfo(OfflinePlayer player){
+	public static void createPlayerInfo(OfflinePlayer player, String name){
 		String uuid = player.getUniqueId().toString();
 		File balancesFolder = new File(Main.instance.getDataFolder(), "balances");
 		File file = new File(balancesFolder, uuid+".yml");
-		if(!file.exists()){
+		if(!file.exists()){ //optimize using balances HashMap here
+			Bukkit.getServer().broadcastMessage(uuid+".yml does not exist! makin it");
 			FileConfiguration info = YamlConfiguration.loadConfiguration(file);
+			info.set("username", name);
 			info.set("balance", DEFAULT_STARTING_BALANCE);
-			info.set("username", player.getName());
 			try {
 				info.save(file);
 				balances.put(player.getUniqueId().toString(), file);

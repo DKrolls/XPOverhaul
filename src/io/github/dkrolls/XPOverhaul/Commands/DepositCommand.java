@@ -33,7 +33,7 @@ public class DepositCommand implements CommandExecutor{
 	}
 	
 	private void deposit(Player player, String arg){
-			ConfigHandler.createPlayerInfo(player); //guarantees player info exists
+			ConfigHandler.createPlayerInfo(player, player.getName()); //guarantees player info exists
 			File file = ConfigHandler.getPlayerInfo(player);
 			FileConfiguration info = YamlConfiguration.loadConfiguration(file);
 			ExperienceManager m = new ExperienceManager(player);
@@ -43,6 +43,10 @@ public class DepositCommand implements CommandExecutor{
 				int value = Integer.parseInt(arg);
 				if(value > xp){
 					player.sendMessage(Main.prefix+"You can't deposit more XP than you currently have!");
+					return;
+				}
+				else if(value <= 0){
+					player.sendMessage(Main.prefix+"You can only deposit positive values.");
 					return;
 				}
 				info.set("balance", value + balance);

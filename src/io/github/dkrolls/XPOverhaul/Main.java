@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.dkrolls.XPOverhaul.Commands.BalanceCommand;
 import io.github.dkrolls.XPOverhaul.Commands.DepositCommand;
 import io.github.dkrolls.XPOverhaul.Commands.ReloadCommand;
+import io.github.dkrolls.XPOverhaul.Commands.SendCommand;
 import io.github.dkrolls.XPOverhaul.Commands.WithdrawCommand;
 import io.github.dkrolls.XPOverhaul.Listeners.EnchantEventListener;
 import io.github.dkrolls.XPOverhaul.Listeners.EnchantingTableListener;
@@ -27,6 +28,7 @@ public class Main extends JavaPlugin{
 		this.getCommand("xpdeposit").setExecutor(new DepositCommand());
 		this.getCommand("xpwithdraw").setExecutor(new WithdrawCommand());
 		this.getCommand("xpbalance").setExecutor(new BalanceCommand());
+		this.getCommand("xpsend").setExecutor(new SendCommand());
 		this.getCommand("xpreload").setExecutor(new ReloadCommand());
 	}
 	

@@ -1,6 +1,6 @@
 #XPOverhaul Config File
 enchanting:
   allow-bottle-enchanting: true
-  allow-higher-levels: false
 balances:
   initial-balance: 0
+  allow-viewing-other-balances: false

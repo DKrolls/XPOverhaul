@@ -1,8 +1,6 @@
 package io.github.dkrolls.XPOverhaul.Commands;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -27,10 +25,12 @@ public class BalanceCommand implements CommandExecutor{
 			sender.sendMessage(Main.prefix+"Invalid usage! "+cmd.getUsage());
 		}
 		else if(args.length == 1){
-			UUIDFetcher f = new UUIDFetcher(Arrays.asList(args[0]));
+			if(!ConfigHandler.ALLOW_VIEWING_OTHER_BALANCES || !sender.hasPermission("XPO.transaction.other")){
+				sender.sendMessage(Main.prefix+"You're not allowed to view others' balances.");
+				return true;
+			}
 			try {
-				Map<String, UUID> uuids = f.call();
-				UUID uuid = uuids.get(args[0]);
+				UUID uuid = UUIDFetcher.getUUIDOf(args[0]);
 				if(uuid == null){
 					sender.sendMessage(Main.prefix+args[0]+" has no account on file!");
 					return true;

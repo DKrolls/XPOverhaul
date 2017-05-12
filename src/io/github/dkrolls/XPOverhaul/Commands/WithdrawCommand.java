@@ -33,7 +33,7 @@ public class WithdrawCommand implements CommandExecutor{
 	}
 	
 	private void withdraw(Player player, String arg){
-		ConfigHandler.createPlayerInfo(player); //guarantees player info exists
+		ConfigHandler.createPlayerInfo(player, player.getName()); //guarantees player info exists
 		File file = ConfigHandler.getPlayerInfo(player);
 		FileConfiguration info = YamlConfiguration.loadConfiguration(file);
 		ExperienceManager m = new ExperienceManager(player);
@@ -43,6 +43,10 @@ public class WithdrawCommand implements CommandExecutor{
 			int value = Integer.parseInt(arg);
 			if(value > balance){
 				player.sendMessage(Main.prefix+"You can't withdraw more XP than you have!");
+				return;
+			}
+			else if(value <= 0){
+				player.sendMessage(Main.prefix+"You can only withdraw positive values.");
 				return;
 			}
 			info.set("balance", balance - value);

@@ -2,6 +2,7 @@ name: XPOverhaul
 main: io.github.dkrolls.XPOverhaul.Main
 author: Smileyguy19131/DKrolls
 version: 1.0
+
 commands:
   xpdeposit:
     description: Deposits XP into an account.
@@ -17,10 +18,32 @@ commands:
     description: Finds the XP in an account.
     aliases: [xpb]
     permission: XPO.transaction
-    usage: Correct usage is /xpbalance (account)
+    usage: Correct usage is /xpbalance (account).
+  xpsend:
+    description: Transfers XP from one account to another.
+    aliases: [xps]
+    permission: XPO.send
+    usage: Correct usage is /xpsend (source) [destination] [amount].
   xpreload:
     description: Reloads configuration files.
     aliases: [xpr]
     permission: XPO.admin
     usage: Correct usage is /xpreload.
 
+permissions:
+  XPO.transaction:
+    description: Allows access to depositing, withdrawing and checking XP balance.
+    children:
+      XPO.transaction.other: true
+  XPO.transaction.other:
+    description: Allows viewing of others' balances.
+  XPO.send:
+    description: Allows transfer from one account to another.
+    children:
+      XPO.send.other: true
+  XPO.send.other:
+    description: Allows transferring from a source that is not one's own.
+  XPO.admin:
+    description: Allows access to reloading config files.
+  XPO.bottle:
+    description: Allows bottling of experience using an enchanting table.
