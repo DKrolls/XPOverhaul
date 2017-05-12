@@ -1,0 +1,26 @@
+name: XPOverhaul
+main: io.github.dkrolls.XPOverhaul.Main
+author: Smileyguy19131/DKrolls
+version: 1.0
+commands:
+  xpdeposit:
+    description: Deposits XP into an account.
+    aliases: [xpd]
+    permission: XPO.transaction
+    usage: Correct usage is /xpdeposit [amount](L).
+  xpwithdraw:
+    description: Withdraws XP from an account.
+    aliases: [xpw]
+    permission: XPO.transaction
+    usage: Correct usage is /xpwithdraw [amount](L).
+  xpbalance:
+    description: Finds the XP in an account.
+    aliases: [xpb]
+    permission: XPO.transaction
+    usage: Correct usage is /xpbalance (account)
+  xpreload:
+    description: Reloads configuration files.
+    aliases: [xpr]
+    permission: XPO.admin
+    usage: Correct usage is /xpreload.
+
