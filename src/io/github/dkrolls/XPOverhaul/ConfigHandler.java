@@ -38,7 +38,6 @@ public class ConfigHandler {
 		File balancesFolder = new File(Main.instance.getDataFolder(), "balances");
 		File file = new File(balancesFolder, uuid+".yml");
 		if(!file.exists()){ //optimize using balances HashMap here
-			Bukkit.getServer().broadcastMessage(uuid+".yml does not exist! makin it");
 			FileConfiguration info = YamlConfiguration.loadConfiguration(file);
 			info.set("username", name);
 			info.set("balance", DEFAULT_STARTING_BALANCE);

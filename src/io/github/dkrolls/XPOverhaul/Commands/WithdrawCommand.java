@@ -62,7 +62,7 @@ public class WithdrawCommand implements CommandExecutor{
 		}catch(NumberFormatException e){
 			if(arg.equals("all")){
 				m.setExp(balance + xp);
-				player.sendMessage(Main.prefix+"Withdrew "+ChatColor.GREEN+xp+ChatColor.WHITE+
+				player.sendMessage(Main.prefix+"Withdrew "+ChatColor.GREEN+balance+ChatColor.WHITE+
 					" XP! Your current balance is "+ChatColor.GREEN+"0"+ChatColor.WHITE+" XP.");
 				info.set("balance", 0);
 				try {

@@ -24,6 +24,11 @@ commands:
     aliases: [xps]
     permission: XPO.send
     usage: Correct usage is /xpsend (source) [destination] [amount].
+  xpmodify:
+    description: Modifies an account balance. Negative deducts XP.
+    aliases: [xpm]
+    permission: XPO.admin
+    usage: Correct usage is /xpmodify [account] (-)[amount].
   xpreload:
     description: Reloads configuration files.
     aliases: [xpr]
@@ -44,6 +49,6 @@ permissions:
   XPO.send.other:
     description: Allows transferring from a source that is not one's own.
   XPO.admin:
-    description: Allows access to reloading config files.
+    description: Allows modifying balances and reloading config.
   XPO.bottle:
     description: Allows bottling of experience using an enchanting table.

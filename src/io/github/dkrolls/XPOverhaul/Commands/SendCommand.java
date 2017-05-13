@@ -100,6 +100,7 @@ public class SendCommand implements CommandExecutor{
 						transfer(sender, value, src, dst, args[0], args[1]);
 					}catch(NumberFormatException e1){
 						sender.sendMessage(Main.prefix+"Please enter a valid amount to transfer.");
+						return true;
 					}
 				}
 				else{
