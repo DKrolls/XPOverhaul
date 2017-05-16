@@ -61,7 +61,7 @@ public class BalanceCommand implements CommandExecutor{
 			return;
 		}
 		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-		long balance = config.getLong("balance");
+		int balance = config.getInt("balance");
 		sender.sendMessage(Main.prefix+name+"'s balance is "+ChatColor.GREEN+balance+".");
 	}
 }

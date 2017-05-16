@@ -2,7 +2,11 @@ package io.github.dkrolls.XPOverhaul;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -11,28 +15,40 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
 	//balances contains File objects nesting FileConfigurations
-	static HashMap<String, File> balances = new HashMap<String, File>();
+	private static HashMap<String, File> balances = new HashMap<String, File>();
+	private static XPAccount[] topAccounts;
 	
-	public static long DEFAULT_STARTING_BALANCE;
+	public static int DEFAULT_STARTING_BALANCE;
 	public static boolean ALLOW_BOTTLE_ENCHANTING;
 	public static boolean ALLOW_VIEWING_OTHER_BALANCES;
+	public static int TOP_BALANCES_TO_SHOW;
 	
+	/**
+	 * Refreshes HashMap mapping UUIDs to player balance files.
+	 * Also will reload values stored in config.yml.
+	 */
 	public static void initializeConfigs(){
 		File file = new File(Main.instance.getDataFolder(), "config.yml");
 		if(!file.exists()){
 			Main.instance.saveResource("config.yml", false);
 		}
 		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-		DEFAULT_STARTING_BALANCE = config.getLong("balances.initial-balance"); //could break
+		DEFAULT_STARTING_BALANCE = config.getInt("balances.initial-balance"); //could break
 		ALLOW_VIEWING_OTHER_BALANCES = config.getBoolean("balances.allow-viewing-other-balances");
+		TOP_BALANCES_TO_SHOW = config.getInt("balances.xptop-number");
 		ALLOW_BOTTLE_ENCHANTING = config.getBoolean("enchanting.allow-bottle-enchanting");
 		File balanceFolder = new File(Main.instance.getDataFolder(), "balances");
 		if(!balanceFolder.exists()){
 			balanceFolder.mkdirs();
 		}
-		balances = getBalances(); // ~N initialization, constant lookup and insert
+		initializeTables();
 	}
-	
+	/**
+	 * Creates player balance file if it doesn't already exist.
+	 * Call this before a method to prevent NPEs.
+	 * @param player
+	 * @param name
+	 */
 	public static void createPlayerInfo(OfflinePlayer player, String name){
 		String uuid = player.getUniqueId().toString();
 		File balancesFolder = new File(Main.instance.getDataFolder(), "balances");
@@ -51,23 +67,46 @@ public class ConfigHandler {
 		}
 	}
 	
-	/*
-	 * Returns null if hasn't played before
+	/**
+	 * Gets a File pointing to a player's balance information.
+	 * @param player OfflinePlayer to get balance of
+	 * @return File that can be opened as a FileConfiguration
 	 */
 	public static File getPlayerInfo(OfflinePlayer player){
 		return balances.get(player.getUniqueId().toString());
 	}
 	
-	/*
-	 * Avoid using this as it pulls the entire list
+	/**
+	 * Saves config to file.
+	 * @param config The FileConfiguration to be saved to File file
+	 * @param file The file where config is to be saved
+	 * @throws IOException when the given file cannot be written to for any reason
 	 */
-	private static HashMap<String, File> getBalances(){
+	public static void updateBalance(FileConfiguration config, File file) throws IOException{
+		config.save(file);
+	}
+	
+	public static XPAccount[] getTopAccounts(){
+		return topAccounts;
+	}
+	
+	/**
+	 * This pulls all balances stored in the "balances" folder and stores them in a HashMap for quick reference.
+	 * This pulls all balances stored in the "balances" folder and stores them in a HashMap to provide /xpt abilities.
+	 * Avoid using this as it is a costly I/O operation.
+	 */
+	private static void initializeTables(){
 		File balanceFolder = new File(Main.instance.getDataFolder(), "balances");
-		HashMap<String, File> balances = new HashMap<String, File>();
-		for(File f : balanceFolder.listFiles()){
-			String uuid = f.getName().substring(0, f.getName().indexOf('.'));
-			balances.put(uuid, f);
+		List<XPAccount> accountList = new ArrayList<XPAccount>();
+		for(File file : balanceFolder.listFiles()){
+			String uuidString = file.getName().substring(0, file.getName().indexOf('.'));
+			UUID uuid = UUID.fromString(uuidString);
+			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+			int balance = config.getInt("balance");
+			accountList.add(new XPAccount(balance, uuid));
+			balances.put(uuidString, file);
 		}
-		return balances;
+		topAccounts = accountList.toArray(new XPAccount[accountList.size()]);
+		Arrays.sort(topAccounts);
 	}
 }

@@ -8,6 +8,7 @@ import io.github.dkrolls.XPOverhaul.Commands.DepositCommand;
 import io.github.dkrolls.XPOverhaul.Commands.ModifyCommand;
 import io.github.dkrolls.XPOverhaul.Commands.ReloadCommand;
 import io.github.dkrolls.XPOverhaul.Commands.SendCommand;
+import io.github.dkrolls.XPOverhaul.Commands.TopCommand;
 import io.github.dkrolls.XPOverhaul.Commands.WithdrawCommand;
 import io.github.dkrolls.XPOverhaul.Listeners.EnchantEventListener;
 import io.github.dkrolls.XPOverhaul.Listeners.EnchantingTableListener;
@@ -31,6 +32,7 @@ public class Main extends JavaPlugin{
 		this.getCommand("xpbalance").setExecutor(new BalanceCommand());
 		this.getCommand("xpsend").setExecutor(new SendCommand());
 		this.getCommand("xpmodify").setExecutor(new ModifyCommand());
+		this.getCommand("xptop").setExecutor(new TopCommand());
 		this.getCommand("xpreload").setExecutor(new ReloadCommand());
 	}
 	

@@ -37,7 +37,7 @@ public class DepositCommand implements CommandExecutor{
 			File file = ConfigHandler.getPlayerInfo(player);
 			FileConfiguration info = YamlConfiguration.loadConfiguration(file);
 			ExperienceManager m = new ExperienceManager(player);
-			long balance = info.getLong("balance");
+			int balance = info.getInt("balance");
 			int xp = m.getCurrentExp();
 			try{
 				int value = Integer.parseInt(arg);
@@ -51,7 +51,7 @@ public class DepositCommand implements CommandExecutor{
 				}
 				info.set("balance", value + balance);
 				try {
-					info.save(file);
+					ConfigHandler.updateBalance(info, file);
 				} catch (IOException e) {
 					Bukkit.getLogger().severe("Error saving to file!");
 					e.printStackTrace();
@@ -71,7 +71,7 @@ public class DepositCommand implements CommandExecutor{
 						" XP! Your current balance is "+ChatColor.GREEN+(balance + xp)+ChatColor.WHITE+" XP.");
 					info.set("balance", xp + balance);
 					try {
-						info.save(file);
+						ConfigHandler.updateBalance(info, file);
 					} catch (IOException e0) {
 						Bukkit.getLogger().severe("Error saving to file!");
 						e0.printStackTrace();
@@ -89,7 +89,7 @@ public class DepositCommand implements CommandExecutor{
 						" XP! Your current balance is "+ChatColor.GREEN+(balance + diff)+ChatColor.WHITE+" XP!");
 					info.set("balance", balance + diff);
 					try {
-						info.save(file);
+						ConfigHandler.updateBalance(info, file);
 					} catch (IOException e0) {
 						Bukkit.getLogger().severe("Error saving to file!");
 						e0.printStackTrace();

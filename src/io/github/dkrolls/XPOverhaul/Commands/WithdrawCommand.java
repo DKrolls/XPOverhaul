@@ -37,7 +37,7 @@ public class WithdrawCommand implements CommandExecutor{
 		File file = ConfigHandler.getPlayerInfo(player);
 		FileConfiguration info = YamlConfiguration.loadConfiguration(file);
 		ExperienceManager m = new ExperienceManager(player);
-		long balance = info.getLong("balance");
+		int balance = info.getInt("balance");
 		int xp = m.getCurrentExp();
 		try{
 			int value = Integer.parseInt(arg);
@@ -51,7 +51,7 @@ public class WithdrawCommand implements CommandExecutor{
 			}
 			info.set("balance", balance - value);
 			try {
-				info.save(file);
+				ConfigHandler.updateBalance(info, file);
 			} catch (IOException e) {
 				Bukkit.getLogger().severe("Error saving to file!");
 				e.printStackTrace();
@@ -66,7 +66,7 @@ public class WithdrawCommand implements CommandExecutor{
 					" XP! Your current balance is "+ChatColor.GREEN+"0"+ChatColor.WHITE+" XP.");
 				info.set("balance", 0);
 				try {
-					info.save(file);
+					ConfigHandler.updateBalance(info, file);
 				} catch (IOException e0) {
 					Bukkit.getLogger().severe("Error saving to file!");
 					e0.printStackTrace();
@@ -85,7 +85,7 @@ public class WithdrawCommand implements CommandExecutor{
 					" XP! Your current balance is "+ChatColor.GREEN+(balance - diff)+ChatColor.WHITE+" XP!");
 				info.set("balance", balance - diff);
 				try {
-					info.save(file);
+					ConfigHandler.updateBalance(info, file);
 				} catch (IOException e0) {
 					Bukkit.getLogger().severe("Error saving to file!");
 					e0.printStackTrace();

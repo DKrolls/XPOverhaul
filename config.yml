@@ -4,3 +4,4 @@ enchanting:
 balances:
   initial-balance: 0
   allow-viewing-other-balances: false
+  xptop-number: 5

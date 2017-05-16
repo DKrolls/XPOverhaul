@@ -45,7 +45,7 @@ public class SendCommand implements CommandExecutor{
 				return true;
 			}
 			try{
-				long value = Long.parseLong(args[1]);
+				int value = Integer.parseInt(args[1]);
 				transfer(sender, value, src, dst, src.getName(), args[0]);
 			}catch(NumberFormatException e){
 				if(args[1].equals("all")){
@@ -81,14 +81,14 @@ public class SendCommand implements CommandExecutor{
 				return true;
 			}
 			try{
-				long value = Long.parseLong(args[2]);
+				int value = Integer.parseInt(args[2]);
 				transfer(sender, value, src, dst, args[0], args[1]);
 			}catch(NumberFormatException e){
 				if(args[2].equals("all")){
 					ConfigHandler.createPlayerInfo(src, args[0]);
 					File srcFile = ConfigHandler.getPlayerInfo(src);
 					FileConfiguration srcConfig = YamlConfiguration.loadConfiguration(srcFile);
-					long srcBalance = srcConfig.getLong("balance");
+					int srcBalance = srcConfig.getInt("balance");
 					transfer(sender, srcBalance, src, dst, args[0], args[1]);
 				}
 				else if(args[2].charAt(args[2].length() - 1) == 'l' || args[2].charAt(args[2].length() - 1) == 'L'){
@@ -111,7 +111,7 @@ public class SendCommand implements CommandExecutor{
 		}
 		return true;
 	}
-	private void transfer(CommandSender sender, long value, OfflinePlayer src, OfflinePlayer dst, String srcName, String dstName){
+	private void transfer(CommandSender sender, int value, OfflinePlayer src, OfflinePlayer dst, String srcName, String dstName){
 		if(src == null || dst == null){
 			sender.sendMessage(Main.prefix+"Invalid account. Please try again.");
 			return;
@@ -130,8 +130,8 @@ public class SendCommand implements CommandExecutor{
 		File dstFile = ConfigHandler.getPlayerInfo(dst);
 		FileConfiguration srcConfig = YamlConfiguration.loadConfiguration(srcFile);
 		FileConfiguration dstConfig = YamlConfiguration.loadConfiguration(dstFile);
-		long srcBalance = srcConfig.getLong("balance");
-		long dstBalance = dstConfig.getLong("balance");
+		int srcBalance = srcConfig.getInt("balance");
+		int dstBalance = dstConfig.getInt("balance");
 		if(srcBalance < value){
 			sender.sendMessage(Main.prefix+"Transfer failed! "+srcName+" only has "+ChatColor.GREEN+srcBalance+ChatColor.WHITE+" XP in their account!");
 			return;
@@ -139,8 +139,8 @@ public class SendCommand implements CommandExecutor{
 		dstConfig.set("balance", dstBalance + value);
 		srcConfig.set("balance", srcBalance - value);
 		try {
-			dstConfig.save(dstFile);
-			srcConfig.save(srcFile);
+			ConfigHandler.updateBalance(srcConfig, srcFile);
+			ConfigHandler.updateBalance(dstConfig, dstFile);
 			sender.sendMessage(Main.prefix+"Successfully transfered "+ChatColor.GREEN+value+ChatColor.WHITE+" XP from "+srcName+" to "+dstName+".");
 			if(dst.getPlayer() != null){
 				dst.getPlayer().sendMessage(Main.prefix+"You received "+ChatColor.GREEN+value+ChatColor.WHITE+" XP from "

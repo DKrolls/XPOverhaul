@@ -29,6 +29,11 @@ commands:
     aliases: [xpm]
     permission: XPO.admin
     usage: Correct usage is /xpmodify [account] (-)[amount].
+  xptop:
+    description: Shows top XP balances.
+    aliases: [xpt]
+    permission: XPO.transaction.top
+    usage: Correct usage is /xptop.
   xpreload:
     description: Reloads configuration files.
     aliases: [xpr]
@@ -40,8 +45,11 @@ permissions:
     description: Allows access to depositing, withdrawing and checking XP balance.
     children:
       XPO.transaction.other: true
+      XPO.transaction.top: true
   XPO.transaction.other:
     description: Allows viewing of others' balances.
+  XPO.transaction.top:
+    description: Allows viewing top XP balances.
   XPO.send:
     description: Allows transfer from one account to another.
     children:

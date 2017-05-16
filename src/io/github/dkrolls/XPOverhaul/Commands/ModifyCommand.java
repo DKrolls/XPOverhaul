@@ -66,11 +66,12 @@ public class ModifyCommand implements CommandExecutor{
 			return;
 		}
 		try{
+			ConfigHandler.createPlayerInfo(player, name);
 			File file = ConfigHandler.getPlayerInfo(player);
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-			long balance = config.getLong("balance");
+			int balance = config.getInt("balance");
 			config.set("balance", balance + value);
-			config.save(file);
+			ConfigHandler.updateBalance(config, file);
 			if(value < 0){
 				sender.sendMessage(Main.prefix+"Deducted "+ChatColor.GREEN+(-value)+ChatColor.WHITE+
 					" XP from "+name+"'s balance. Their remaining balance is "+ChatColor.GREEN+(balance + value)+".");
