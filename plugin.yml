@@ -43,20 +43,26 @@ commands:
 permissions:
   XPO.transaction:
     description: Allows access to depositing, withdrawing and checking XP balance.
+    default: true
     children:
-      XPO.transaction.other: true
       XPO.transaction.top: true
   XPO.transaction.other:
     description: Allows viewing of others' balances.
+    default: op
   XPO.transaction.top:
     description: Allows viewing top XP balances.
+    default: true
   XPO.send:
     description: Allows transfer from one account to another.
+    default: true
     children:
       XPO.send.other: true
   XPO.send.other:
     description: Allows transferring from a source that is not one's own.
+    default: op
   XPO.admin:
     description: Allows modifying balances and reloading config.
+    default: op
   XPO.bottle:
     description: Allows bottling of experience using an enchanting table.
+    default: true

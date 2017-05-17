@@ -13,9 +13,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import io.github.dkrolls.XPOverhaul.Misc.NameFetcher;
+
 public class ConfigHandler {
 	//balances contains File objects nesting FileConfigurations
-	private static HashMap<String, File> balances = new HashMap<String, File>();
+	private static HashMap<UUID, File> balances = new HashMap<UUID, File>();
 	private static XPAccount[] topAccounts;
 	
 	public static int DEFAULT_STARTING_BALANCE;
@@ -50,16 +52,16 @@ public class ConfigHandler {
 	 * @param name
 	 */
 	public static void createPlayerInfo(OfflinePlayer player, String name){
-		String uuid = player.getUniqueId().toString();
+		UUID uuid = player.getUniqueId();
 		File balancesFolder = new File(Main.instance.getDataFolder(), "balances");
-		File file = new File(balancesFolder, uuid+".yml");
+		File file = new File(balancesFolder, uuid.toString()+".yml");
 		if(!file.exists()){ //optimize using balances HashMap here
 			FileConfiguration info = YamlConfiguration.loadConfiguration(file);
 			info.set("username", name);
 			info.set("balance", DEFAULT_STARTING_BALANCE);
 			try {
 				info.save(file);
-				balances.put(player.getUniqueId().toString(), file);
+				balances.put(player.getUniqueId(), file);
 			} catch (IOException e) {
 				Bukkit.getLogger().severe("Error saving to file!");
 				e.printStackTrace();
@@ -73,17 +75,21 @@ public class ConfigHandler {
 	 * @return File that can be opened as a FileConfiguration
 	 */
 	public static File getPlayerInfo(OfflinePlayer player){
-		return balances.get(player.getUniqueId().toString());
+		return balances.get(player.getUniqueId());
 	}
 	
 	/**
 	 * Saves config to file.
 	 * @param config The FileConfiguration to be saved to File file
 	 * @param file The file where config is to be saved
-	 * @throws IOException when the given file cannot be written to for any reason
+	 * @throws IOException 
 	 */
 	public static void updateBalance(FileConfiguration config, File file) throws IOException{
-		config.save(file);
+		UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().indexOf('.')));
+		try {
+			config.set("username", NameFetcher.getName(uuid));
+			config.save(file);
+		} catch (Exception e) {}
 	}
 	
 	public static XPAccount[] getTopAccounts(){
@@ -104,7 +110,7 @@ public class ConfigHandler {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			int balance = config.getInt("balance");
 			accountList.add(new XPAccount(balance, uuid));
-			balances.put(uuidString, file);
+			balances.put(uuid, file);
 		}
 		topAccounts = accountList.toArray(new XPAccount[accountList.size()]);
 		Arrays.sort(topAccounts);

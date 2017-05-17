@@ -1,6 +1,9 @@
 package io.github.dkrolls.XPOverhaul.Misc;
 
 import com.google.common.collect.ImmutableList;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -24,6 +27,9 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
     private final JSONParser jsonParser = new JSONParser();
     private final List<UUID> uuids;
+    
+    private static HashMap<UUID, String> cachedIDs = new HashMap<UUID, String>();
+    
     public NameFetcher(List<UUID> uuids) {
         this.uuids = ImmutableList.copyOf(uuids);
     }
@@ -48,8 +54,17 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
         return uuidStringMap;
     }
     
-    public static String getName(String uuid) throws Exception{
-    	NameFetcher f = new NameFetcher(Arrays.asList(UUID.fromString(uuid)));
-    	return f.call().get(UUID.fromString(uuid));
+    public static String getName(UUID uuid) throws Exception{
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+    	if(player.getName() != null){ //small optimization prevents accessing server
+    		return player.getName();
+    	}
+    	else if(cachedIDs.get(uuid) != null){
+    		return cachedIDs.get(uuid);
+    	}
+    	NameFetcher f = new NameFetcher(Arrays.asList(uuid));
+    	String name = f.call().get(uuid);
+    	cachedIDs.put(uuid, name);
+    	return name;
     }
 }

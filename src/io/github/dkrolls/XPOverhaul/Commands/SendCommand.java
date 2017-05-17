@@ -144,7 +144,7 @@ public class SendCommand implements CommandExecutor{
 			sender.sendMessage(Main.prefix+"Successfully transfered "+ChatColor.GREEN+value+ChatColor.WHITE+" XP from "+srcName+" to "+dstName+".");
 			if(dst.getPlayer() != null){
 				dst.getPlayer().sendMessage(Main.prefix+"You received "+ChatColor.GREEN+value+ChatColor.WHITE+" XP from "
-					+dstName+". Your current balance is "+ChatColor.GREEN+(srcBalance + value)+ChatColor.WHITE+" XP.");
+					+srcName+". Your current balance is "+ChatColor.GREEN+(dstBalance + value)+ChatColor.WHITE+" XP.");
 			}
 			if(src.getPlayer() != null){
 				src.getPlayer().sendMessage(Main.prefix+"You sent "+ChatColor.GREEN+value+ChatColor.WHITE+" XP to "

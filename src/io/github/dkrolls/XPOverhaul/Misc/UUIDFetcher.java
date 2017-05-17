@@ -22,6 +22,7 @@
 package io.github.dkrolls.XPOverhaul.Misc;
 
 import com.google.common.collect.ImmutableList;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,6 +42,8 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private final List<String> names;
     private final boolean rateLimiting;
 
+    private static HashMap<String, UUID> cachedIDs = new HashMap<String, UUID>();
+    
     public UUIDFetcher(List<String> names, boolean rateLimiting) {
         this.names = ImmutableList.copyOf(names);
         this.rateLimiting = rateLimiting;
@@ -112,6 +115,11 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public static UUID getUUIDOf(String name) throws Exception {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name);
+    	if(cachedIDs.get(name) != null){
+    		return cachedIDs.get(name);
+    	}
+        UUID uuid = new UUIDFetcher(Arrays.asList(name)).call().get(name);
+		cachedIDs.put(name, uuid);
+        return uuid;
     }
 }

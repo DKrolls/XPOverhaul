@@ -1,4 +1,5 @@
 package io.github.dkrolls.XPOverhaul;
+
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;

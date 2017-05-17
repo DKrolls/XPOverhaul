@@ -2,7 +2,6 @@ package io.github.dkrolls.XPOverhaul.Commands;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,13 +28,12 @@ public class TopCommand implements CommandExecutor{
 		for(int i = 0; i < num; i++){
 			int balance = topAccounts[topAccounts.length - 1 - i].getBalance();
 			UUID uuid = topAccounts[topAccounts.length - 1 - i].getUUID();
-			String name = Bukkit.getOfflinePlayer(uuid).getName();
-			if(name == null){
-				try {
-					name = NameFetcher.getName(uuid.toString());
-				} catch (Exception e) {
-					name = uuid.toString();
-				}
+			String name;
+			try {
+				name = NameFetcher.getName(uuid);
+			} catch (Exception e) {
+				e.printStackTrace();
+				name = uuid.toString();
 			}
 			sender.sendMessage(Main.prefix+ChatColor.GREEN+"#"+(i + 1)+": "+ChatColor.WHITE+name+
 				": "+ChatColor.GREEN+balance+ChatColor.WHITE+" XP.");
