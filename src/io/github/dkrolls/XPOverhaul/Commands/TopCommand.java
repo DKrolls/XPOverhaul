@@ -21,6 +21,9 @@ public class TopCommand implements CommandExecutor{
 		}
 		XPAccount[] topAccounts = ConfigHandler.getTopAccounts();
 		int num = topAccounts.length;
+		if(num == 0){
+			sender.sendMessage(Main.prefix+"No balances to show!");
+		}
 		if(num > ConfigHandler.TOP_BALANCES_TO_SHOW){
 			num = ConfigHandler.TOP_BALANCES_TO_SHOW;
 		}

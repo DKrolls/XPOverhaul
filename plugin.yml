@@ -1,7 +1,7 @@
 name: XPOverhaul
 main: io.github.dkrolls.XPOverhaul.Main
 author: Smileyguy19131/DKrolls
-version: 1.0
+version: 1.0.1
 
 commands:
   xpdeposit:
