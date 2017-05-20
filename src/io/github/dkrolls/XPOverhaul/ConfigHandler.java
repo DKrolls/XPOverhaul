@@ -24,6 +24,8 @@ public class ConfigHandler {
 	public static boolean ALLOW_BOTTLE_ENCHANTING;
 	public static boolean ALLOW_VIEWING_OTHER_BALANCES;
 	public static int TOP_BALANCES_TO_SHOW;
+	public static boolean REQUIRE_LAPIS;
+	public static int LEVELS_FOR_XP_BOTTLES;
 	
 	/**
 	 * Refreshes HashMap mapping UUIDs to player balance files.
@@ -35,10 +37,19 @@ public class ConfigHandler {
 			Main.instance.saveResource("config.yml", false);
 		}
 		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+		updateConfig(config);
+		try {
+			config.save(file);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 		DEFAULT_STARTING_BALANCE = config.getInt("balances.initial-balance"); //could break
 		ALLOW_VIEWING_OTHER_BALANCES = config.getBoolean("balances.allow-viewing-other-balances");
 		TOP_BALANCES_TO_SHOW = config.getInt("balances.xptop-number");
-		ALLOW_BOTTLE_ENCHANTING = config.getBoolean("enchanting.allow-bottle-enchanting");
+		ALLOW_BOTTLE_ENCHANTING = config.getBoolean("enchanting.bottle-enchanting.allow-bottle-enchanting");
+		REQUIRE_LAPIS = config.getBoolean("enchanting.require-lapis");
+		LEVELS_FOR_XP_BOTTLES = config.getInt("enchanting.bottle-enchanting.levels-per-bottle");
 		File balanceFolder = new File(Main.instance.getDataFolder(), "balances");
 		if(!balanceFolder.exists()){
 			balanceFolder.mkdirs();
@@ -98,7 +109,7 @@ public class ConfigHandler {
 	
 	/**
 	 * This pulls all balances stored in the "balances" folder and stores them in a HashMap for quick reference.
-	 * This pulls all balances stored in the "balances" folder and stores them in a HashMap to provide /xpt abilities.
+	 * This pulls all balances stored in the "balances" folder and stores them in an array to provide /xpt abilities.
 	 * Avoid using this as it is a costly I/O operation.
 	 */
 	private static void initializeTables(){
@@ -114,5 +125,23 @@ public class ConfigHandler {
 		}
 		topAccounts = accountList.toArray(new XPAccount[accountList.size()]);
 		Arrays.sort(topAccounts);
+	}
+	/**
+	 * Updates config.yml to reflect changes since last update
+	 * @param config FileConfiguration to update
+	 */
+	private static void updateConfig(FileConfiguration config){
+		Bukkit.getLogger().info("[XPOverhaul] Checking for config updates...");
+		if(!config.contains("enchanting.require-lapis")){
+			config.set("enchanting.require-lapis", true);
+			Bukkit.getLogger().info("[XPOverhaul] Update needed. Updating...");
+		}
+		if(!config.contains("enchanting.bottle-enchanting")){
+			config.createSection("enchanting.bottle-enchanting");
+			boolean bottleEnchanting = config.getBoolean("enchanting.allow-bottle-enchanting");
+			config.set("enchanting.bottle-enchanting.allow-bottle-enchanting", bottleEnchanting);
+			config.set("enchanting.bottle-enchanting.levels-per-bottle", 1);
+		}
+		config.set("enchanting.allow-bottle-enchanting", null);
 	}
 }

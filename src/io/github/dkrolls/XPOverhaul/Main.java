@@ -43,6 +43,7 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void onDisable(){
+		EnchantingTableListener.purgeUseList();
 		instance = null;
 	}
 }

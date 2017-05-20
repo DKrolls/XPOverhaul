@@ -1,6 +1,9 @@
 #XPOverhaul Config File
 enchanting:
-  allow-bottle-enchanting: true
+  bottle-enchanting:
+    allow-bottle-enchanting: true
+    levels-per-bottle: 1
+  require-lapis: true
 balances:
   initial-balance: 0
   allow-viewing-other-balances: false
