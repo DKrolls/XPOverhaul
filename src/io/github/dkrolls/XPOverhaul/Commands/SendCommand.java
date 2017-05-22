@@ -67,8 +67,8 @@ public class SendCommand implements CommandExecutor{
 			}
 		}
 		else if(args.length == 3){ //transfer [src] [dst] [amount]
-			if(!sender.hasPermission("XPO.transfer.other")){
-				sender.sendMessage(Main.prefix+"You can only transfer balance from you own account.");
+			if(!sender.hasPermission("XPO.send.other")){
+				sender.sendMessage(Main.prefix+"You can only transfer balance from your own account.");
 				return true;
 			}
 			OfflinePlayer src = null;
